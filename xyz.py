@@ -4,7 +4,8 @@ import re
 from gtts import gTTS
 import os
 import tempfile
-from moviepy.editor import TextClip, concatenate_videoclips, AudioFileClip
+from moviepy.editor import *  # MoviePy for video editing
+from PIL import Image, ImageDraw, ImageFont
 
 # Load the AI Model
 @st.cache_resource
@@ -45,29 +46,36 @@ def text_to_audio(text):
     tts.save(temp_audio_path)
     return temp_audio_path
 
-# Create a video with audio and text
+# Create a video with audio and text using PIL for text rendering
 def create_video_with_script_audio(script_text, audio_file_path):
     """Generates a video with the given script text and audio."""
     # Set video parameters
     clip_duration = 10  # Duration for each screen showing the script text
     screen_width = 1920
     screen_height = 1080
+    font_size = 50
+    font_color = "white"
+    bg_color = "black"
 
-    # Generate the video clip from script text
+    # Create the video clips by rendering the text as images
     clips = []
     for i in range(0, len(script_text), 100):  # Show a portion of text every 100 characters
         text = script_text[i:i+100]
-        # Use 'DejaVuSans' font as a simple default font
-        txt_clip = TextClip(
-            text, 
-            fontsize=50, 
-            color='white', 
-            bg_color='black', 
-            size=(screen_width, screen_height),
-            font="DejaVuSans"  # Use a basic font available in most environments
-        )
-        txt_clip = txt_clip.set_duration(clip_duration)
-        clips.append(txt_clip)
+
+        # Use PIL to render text on an image
+        img = Image.new('RGB', (screen_width, screen_height), color=bg_color)
+        d = ImageDraw.Draw(img)
+        try:
+            # Use a system font that should be available
+            font = ImageFont.load_default()  # Load default font
+        except IOError:
+            font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", font_size)
+        d.text((10, 10), text, font=font, fill=font_color)
+
+        # Convert the PIL image to a MoviePy clip
+        img_clip = ImageClip(np.array(img))
+        img_clip = img_clip.set_duration(clip_duration)
+        clips.append(img_clip)
 
     # Concatenate clips to form the video
     video = concatenate_videoclips(clips, method="compose")
