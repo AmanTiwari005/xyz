@@ -6,6 +6,7 @@ import os
 import tempfile
 from moviepy.editor import *  # MoviePy for video editing
 from PIL import Image, ImageDraw, ImageFont
+import numpy as np  # Import numpy to convert PIL image to NumPy array
 
 # Load the AI Model
 @st.cache_resource
@@ -73,7 +74,7 @@ def create_video_with_script_audio(script_text, audio_file_path):
         d.text((10, 10), text, font=font, fill=font_color)
 
         # Convert the PIL image to a MoviePy clip
-        img_clip = ImageClip(np.array(img))
+        img_clip = ImageClip(np.array(img))  # Convert PIL image to numpy array
         img_clip = img_clip.set_duration(clip_duration)
         clips.append(img_clip)
 
