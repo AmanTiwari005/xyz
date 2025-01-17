@@ -4,7 +4,7 @@ import re
 from gtts import gTTS
 import os
 import tempfile
-from moviepy.editor import *  # MoviePy for video editing
+from moviepy.editor import TextClip, concatenate_videoclips, AudioFileClip
 
 # Load the AI Model
 @st.cache_resource
@@ -57,14 +57,14 @@ def create_video_with_script_audio(script_text, audio_file_path):
     clips = []
     for i in range(0, len(script_text), 100):  # Show a portion of text every 100 characters
         text = script_text[i:i+100]
-        # Add a font to prevent OSError in Streamlit Cloud
+        # Use 'DejaVuSans' font as a simple default font
         txt_clip = TextClip(
             text, 
             fontsize=50, 
             color='white', 
             bg_color='black', 
             size=(screen_width, screen_height),
-            font="Arial"  # Specify a font that is available in most environments
+            font="DejaVuSans"  # Use a basic font available in most environments
         )
         txt_clip = txt_clip.set_duration(clip_duration)
         clips.append(txt_clip)
