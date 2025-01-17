@@ -57,7 +57,15 @@ def create_video_with_script_audio(script_text, audio_file_path):
     clips = []
     for i in range(0, len(script_text), 100):  # Show a portion of text every 100 characters
         text = script_text[i:i+100]
-        txt_clip = TextClip(text, fontsize=50, color='white', bg_color='black', size=(screen_width, screen_height))
+        # Add a font to prevent OSError in Streamlit Cloud
+        txt_clip = TextClip(
+            text, 
+            fontsize=50, 
+            color='white', 
+            bg_color='black', 
+            size=(screen_width, screen_height),
+            font="Arial"  # Specify a font that is available in most environments
+        )
         txt_clip = txt_clip.set_duration(clip_duration)
         clips.append(txt_clip)
 
