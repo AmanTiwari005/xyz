@@ -8,7 +8,7 @@ import requests
 import spacy
 import openai  # OpenAI Chat API for chatbot
 
-os.environ['YOUTUBE_API_KEY'] = 'AIzaSyA_tJPjOSfhguRDPGveIel10MoPY2NVzmA'
+YOUTUBE_API_KEY = 'AIzaSyA_tJPjOSfhguRDPGveIel10MoPY2NVzmA'
 
 # Load NLP model for keyword extraction
 nlp = spacy.load("en_core_web_sm")
@@ -35,7 +35,7 @@ def get_transcript(video_url):
 
 # Function to fetch video metadata
 def get_video_info(video_id):
-    api_key = os.getenv('YOUTUBE_API_KEY')
+    api_key = YOUTUBE_API_KEY
     url = f"https://www.googleapis.com/youtube/v3/videos?part=snippet&id={video_id}&key={api_key}"
     response = requests.get(url)
 
