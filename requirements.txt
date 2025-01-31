@@ -6,3 +6,4 @@ os
 requests
 spacy
 openai
+youtube_transcript_api._errors
