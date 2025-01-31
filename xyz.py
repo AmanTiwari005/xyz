@@ -4,16 +4,20 @@ from youtube_transcript_api import YouTubeTranscriptApi, TranscriptsDisabled
 from gtts import gTTS
 import os
 import requests
-import spacy
 import openai
 from tempfile import NamedTemporaryFile
+import spacy
+import subprocess
 
 # Ensure spaCy model is downloaded
-try:
-    nlp = spacy.load("en_core_web_sm")
-except OSError:
-    os.system("python -m spacy download en_core_web_sm")
-    nlp = spacy.load("en_core_web_sm")
+def load_spacy_model():
+    try:
+        return spacy.load("en_core_web_sm")
+    except OSError:
+        subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm"], check=True)
+        return spacy.load("en_core_web_sm")
+
+nlp = load_spacy_model()
 
 # Initialize summarization model
 summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
