@@ -7,11 +7,14 @@ import requests
 import spacy
 import openai
 from tempfile import NamedTemporaryFile
-import spacy.cli
-# Load NLP model for keyword extraction
 
-spacy.cli.download("en_core_web_sm")
-nlp = spacy.load("en_core_web_sm")
+# Ensure spaCy model is downloaded
+import spacy.cli
+try:
+    nlp = spacy.load("en_core_web_sm")
+except OSError:
+    spacy.cli.download("en_core_web_sm")
+    nlp = spacy.load("en_core_web_sm")
 
 # Initialize summarization model
 summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
