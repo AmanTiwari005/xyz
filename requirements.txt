@@ -5,5 +5,3 @@ gtts
 requests
 spacy
 openai
-spacy
-en-core-web-sm
