@@ -9,11 +9,10 @@ import openai
 from tempfile import NamedTemporaryFile
 
 # Ensure spaCy model is downloaded
-import spacy.cli
 try:
     nlp = spacy.load("en_core_web_sm")
 except OSError:
-    spacy.cli.download("en_core_web_sm")
+    os.system("python -m spacy download en_core_web_sm")
     nlp = spacy.load("en_core_web_sm")
 
 # Initialize summarization model
