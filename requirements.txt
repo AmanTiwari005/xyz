@@ -4,5 +4,6 @@ youtube-transcript-api
 gtts
 requests
 spacy
+en-core-web-sm
 openai
 torch  # Required for transformers
