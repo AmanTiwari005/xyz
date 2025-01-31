@@ -3,5 +3,8 @@ transformers
 youtube-transcript-api
 gtts
 requests
-spacy
 openai
+spacy
+torch
+sentencepiece
+protobuf
