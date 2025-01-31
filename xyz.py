@@ -7,15 +7,14 @@ import requests
 import openai
 from tempfile import NamedTemporaryFile
 import spacy
-import subprocess
 
-# Ensure spaCy model is downloaded
+# Ensure spaCy model is available
 def load_spacy_model():
     try:
         return spacy.load("en_core_web_sm")
     except OSError:
-        subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm"], check=True)
-        return spacy.load("en_core_web_sm")
+        st.error("spaCy model 'en_core_web_sm' not found. Please ensure it is installed in your environment.")
+        return None
 
 # Load spaCy model
 nlp = load_spacy_model()
@@ -41,6 +40,8 @@ def get_transcript(video_url):
 
 # Function to extract key highlights & insights
 def extract_keywords(text):
+    if nlp is None:
+        return []
     doc = nlp(text)
     keywords = {ent.text for ent in doc.ents if ent.label_ in ["ORG", "PRODUCT", "GPE", "PERSON", "EVENT"]}
     return list(keywords)
@@ -114,4 +115,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
