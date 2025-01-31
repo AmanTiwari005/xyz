@@ -1,12 +1,14 @@
-
 import streamlit as st
 from transformers import pipeline
 from youtube_transcript_api import YouTubeTranscriptApi
 from youtube_transcript_api._errors import TranscriptsDisabled
 from gtts import gTTS
+import os
 import requests
 import spacy
 import openai  # OpenAI Chat API for chatbot
+
+os.environ['YOUTUBE_API_KEY'] = 'AIzaSyA_tJPjOSfhguRDPGveIel10MoPY2NVzmA'
 
 # Load NLP model for keyword extraction
 nlp = spacy.load("en_core_web_sm")
@@ -17,9 +19,6 @@ summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
 # OpenAI Chatbot API Key (Replace with your key)
 OPENAI_API_KEY = "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"
 openai.api_key = OPENAI_API_KEY
-
-# YouTube API Key (Replace with your key)
-YOUTUBE_API_KEY = "AIzaSyA_tJPjOSfhguRDPGveIel10MoPY2NVzmA"  # Add your YouTube API key here
 
 # Function to get YouTube transcript
 def get_transcript(video_url):
@@ -36,7 +35,8 @@ def get_transcript(video_url):
 
 # Function to fetch video metadata
 def get_video_info(video_id):
-    url = f"https://www.googleapis.com/youtube/v3/videos?part=snippet&id={video_id}&key={YOUTUBE_API_KEY}"
+    api_key = os.getenv('YOUTUBE_API_KEY')
+    url = f"https://www.googleapis.com/youtube/v3/videos?part=snippet&id={video_id}&key={api_key}"
     response = requests.get(url)
 
     if response.status_code == 200:
