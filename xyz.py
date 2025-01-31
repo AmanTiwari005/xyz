@@ -6,10 +6,19 @@ import os
 import requests
 import openai
 from tempfile import NamedTemporaryFile
-import en_core_web_sm
+import spacy
+import subprocess
+
+# Ensure spaCy model is downloaded
+def load_spacy_model():
+    try:
+        return spacy.load("en_core_web_sm")
+    except OSError:
+        subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm"], check=True)
+        return spacy.load("en_core_web_sm")
 
 # Load spaCy model
-nlp = en_core_web_sm.load()
+nlp = load_spacy_model()
 
 # Initialize summarization model
 summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
@@ -105,3 +114,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
